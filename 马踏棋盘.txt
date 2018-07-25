@@ -1,0 +1,90 @@
+#include <stdio.h>
+#define N 12
+#define M (N-4)*(N-4)
+void PrintHorse();
+int cnt=1,cnt1=0;
+int H[12][12]={0};
+int move[8][2]={{2,1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2},{2,-1}};
+/*
+函数作用：棋盘的初始化 
+函数参数：无参数
+无返回值 
+*/
+void InitializeHorse()
+{
+	int i;
+	for(i=0;i<N;i++)
+	{
+		H[0][i]=-1;
+		H[1][i]=-1;
+		H[i][0]=-1;
+		H[i][1]=-1;
+		H[10][i]=-1;
+		H[11][i]=-1;
+		H[i][10]=-1;
+		H[i][11]=-1;
+	}
+}
+/*
+函数作用：输出解
+函数参数：无参数
+无返回值 
+*/ 
+void PrintHorse()
+{
+	int i,j;
+	for(i=2;i<N-2;++i)
+	{
+		for(j=2;j<N-2;++j)
+		{
+			printf("%3d",H[i][j]);
+		}
+		printf("\n");
+	}
+	printf("%d\n",++cnt);
+}
+/* 
+函数作用 ：马踏棋盘
+函数参数：下一个要踏点的位置 
+无返回值 
+*/ 
+void Horse(int x,int y)
+{
+	int i,a,b;
+	H[x][y]=cnt++;
+	if(cnt==M+1)
+	{
+		//输出解 
+		PrintHorse();
+		return ;
+	}
+	for(i=0;i<8;++i)
+	{
+		a=x+move[i][0];
+		b=y+move[i][1];
+		if(H[a][b]==0)
+		{
+			Horse(a,b);
+			cnt--;
+			H[a][b]=0;
+		}
+	}
+}
+
+int main(void)
+{
+	int i,j;
+	//循环一次 换一个起始点 
+	for(i=2;i<N-2;++i)
+	{
+		for(j=2;j<N-2;++j)
+		{
+			//棋盘初始化 
+			InitializeHorse();
+			cnt=1;
+			//马踏棋盘开始 
+			Horse(i,j);
+		}
+	}
+	return 0;
+}
